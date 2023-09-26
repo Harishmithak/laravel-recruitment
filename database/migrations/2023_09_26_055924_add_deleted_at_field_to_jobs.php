@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('logins', function (Blueprint $table) {
-            $table->id();
-            $table->string('email');
-            $table->string('usertype');
-            $table->timestamp('login_time')->default(now());
-            $table->timestamp('logout_time')->default(now());
-            $table->timestamps();
+        Schema::table('jobs', function (Blueprint $table) {
+            //
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('logins');
+        Schema::table('jobs', function (Blueprint $table) {
+            //
+        });
     }
 };
