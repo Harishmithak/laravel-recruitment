@@ -7,48 +7,67 @@ use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-
+        $loggedInEmail = $request->input('company_email');
+        $jobs = job::where('company_email', $loggedInEmail)->get();
+        return response()->json(['jobs' => $jobs], 200);
+    }
+    public function index1()
+    {
+        
         $jobs = job::all();
         return response()->json(['jobs' => $jobs], 200);
     }
-
     public function store(Request $request)
     {
-       
-        $validatedData = $request->validate([
-            'company_id'=>'required',
-            'company_name'=>'required|string',
-            'job_position' => 'required|string',
-            'job_description' => 'required|string',
-            'basic_qualification' => 'required|string',
-            'skills_required' => 'required|string',
-            'application_start_date' => 'required|date',
-            'application_end_date' => 'required|date',
-        ]);
-
+        try {
+            $request->validate([
+                'company_email' => 'required|email',
+                'job_position' => 'required',
+                'job_description' => 'required',
+                'basic_qualification' => 'required',
+                'skills_required' => 'required',
+                'application_start_date' => 'required|date',
+                'application_end_date' => 'required|date',
+                'status' => 'required',
+            ]);
+    
       
-        // $user = auth()->user();
-        // $companyId = $user->id;
-        // $companyName = $user->company_name;
-
-     
-        $job = new job([
-             'company_id' =>$validatedData['company_id'] ,
-            'company_name' => $validatedData['company_name'],
-            'job_position' => $validatedData['job_position'],
-            'job_description' => $validatedData['job_description'],
-            'basic_qualification' => $validatedData['basic_qualification'],
-            'skills_required' => $validatedData['skills_required'],
-            'application_start_date' => $validatedData['application_start_date'],
-            'application_end_date' => $validatedData['application_end_date'],
-        ]);
-
-        $job->save();
-
-        return response()->json(['message' => 'Job created successfully'], 201);
+            $company = \App\Models\Companyuser::where('company_email', $request->input('company_email'))->first();
+        
+            if (!$company) {
+                return response()->json(['error' => 'Company not found.'], 404);
+            }
+    
+          
+            $job = new Job([
+                'company_id' => $company->id,
+                'company_name' => $company->company_name,
+                'company_email' => $request->input('company_email'),
+                'job_position' => $request->input('job_position'),
+                'job_description' => $request->input('job_description'),
+                'basic_qualification' => $request->input('basic_qualification'),
+                'skills_required' => $request->input('skills_required'),
+                'application_start_date' => $request->input('application_start_date'),
+                'application_end_date' => $request->input('application_end_date'),
+                'status' => $request->input('status'),
+              
+            ]);
+    
+            $company->jobs()->save($job);
+    
+            return response()->json(['job' => $job], 201);
+        } catch (\Exception $e) {
+          
+            \Log::error($e);
+    
+          
+            return response()->json(['error' => 'Internal Server Error'], 500);
+        }
     }
+    
+
     public function show($id)
     {
   
@@ -109,4 +128,19 @@ class JobController extends Controller
     
             return response()->json(['message' => 'Job deleted successfully'], 204);
     }
+    public function showByLoggedInEmail(Request $request)
+{
+    
+    $loggedInEmail = $request->user()->email;
+
+  
+    $jobs = job::where('company_name', $loggedInEmail)->get();
+
+    if ($jobs->isEmpty()) {
+        return response()->json(['message' => 'No jobs found for the logged-in user'], 404);
+    }
+
+    return response()->json(['jobs' => $jobs], 200);
+}
+
 }

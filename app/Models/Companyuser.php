@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\job;
 
 class Companyuser extends Model
 {
@@ -13,5 +14,9 @@ class Companyuser extends Model
         'company_email',
         'company_password',
     ];
+    public function jobs()
+    {
+        return $this->hasMany(job::class, 'company_id');
+    }
  
 }

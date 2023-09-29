@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('company_id')->default(1);
             $table->string('company_name')->default(1);
+            $table->string('company_email')->default(1);
             $table->string('job_position');
             $table->text('job_description');
             $table->string('basic_qualification');

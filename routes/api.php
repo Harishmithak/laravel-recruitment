@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CompanyuserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\CandidatedetailController;
 
 
 /*
@@ -26,13 +27,19 @@ Route::get('/companyusers/{id}', [CompanyuserController::class, 'show']);
 // Route::get('/users/{id}', [UserController::class, 'show']); 
 Route::post('/login', [LoginController::class, 'login']);
 
+// Route::get('/jobsemail', 'JobController@showByLoggedInEmail');
 
 Route::get('/register', function () {
     return view('layouts.app');
 });
 
 
+Route::post('/apply', [CandidatedetailController::class, 'store']);
+// Route::post('/apply', 'CandidatedetailController@store');
+
+
 Route::get('/jobs', [JobController::class, 'index']);
+Route::get('/alljobs', [JobController::class, 'index1']);
 // Route::get('/users', [UserController::class, 'index']); 
  //Route::get('/users', 'UserController@index');
 

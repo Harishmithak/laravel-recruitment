@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Companyuser;
 
 class job extends Model
 {
@@ -22,4 +23,8 @@ class job extends Model
     //     'status',
     // ];
     protected $guarded=[];
+    public function companyuser()
+    {
+        return $this->belongsTo(Companyuser::class, 'company_id');
+    }
 }
