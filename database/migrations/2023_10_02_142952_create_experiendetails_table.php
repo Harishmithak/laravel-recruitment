@@ -11,18 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('candidatedetails', function (Blueprint $table) {
+        Schema::create('experiendetails', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('candidate_id');
+            $table->unsignedBigInteger('academic_id');
             $table->unsignedBigInteger('company_id');
-           
             $table->unsignedBigInteger('job_id');
-            $table->string('name');
-            $table->string('email');
-            $table->date('dob');
-         
+            $table->integer('year_of_experience');  
+            $table->string('previous_company_name');
+            $table->string('previous_job_position');
             $table->timestamps();
+            $table->foreign('candidate_id')->references('id')->on('candidatedetails')->onDelete('cascade');
+            $table->foreign('academic_id')->references('id')->on('academicdetails')->onDelete('cascade');
             $table->foreign('company_id')->references('id')->on('companyusers')->onDelete('cascade');
-            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('job_id')->references('id')->on('jobs')->onDelete('cascade');
         });
     }
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('candidatedetails');
+        Schema::dropIfExists('experiendetails');
     }
 };

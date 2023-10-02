@@ -15,10 +15,14 @@ class JobController extends Controller
     }
     public function index1()
     {
-        
         $jobs = job::all();
+
         return response()->json(['jobs' => $jobs], 200);
+     
+    
     }
+       
+    
     public function store(Request $request)
     {
         try {
@@ -56,13 +60,11 @@ class JobController extends Controller
             ]);
     
             $company->jobs()->save($job);
-    
             return response()->json(['job' => $job], 201);
+
         } catch (\Exception $e) {
           
             \Log::error($e);
-    
-          
             return response()->json(['error' => 'Internal Server Error'], 500);
         }
     }
@@ -104,20 +106,6 @@ class JobController extends Controller
         return response()->json(['message' => 'Job updated successfully', 'job' => $job], 200);
     }
 
-    // public function destroy($id)
-    // {
-       
-    //     $job = job::find($id);
-
-    //     if (!$job) {
-    //         return response()->json(['message' => 'Job not found'], 404);
-    //     }
-
-        
-    //     $job->delete();
-
-    //     return response()->json(['message' => 'Job deleted successfully'], 204);
-    // }
     public function softDelete($id){
         $job = job::find($id);
 
@@ -128,6 +116,14 @@ class JobController extends Controller
     
             return response()->json(['message' => 'Job deleted successfully'], 204);
     }
+
+public function restore($id){
+    $job = job::withTrashed()->find($id);
+    $job->restore();
+    return response()->json(['job' => $job], 200);
+
+}
+
     public function showByLoggedInEmail(Request $request)
 {
     

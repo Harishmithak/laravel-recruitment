@@ -7,12 +7,13 @@ use Illuminate\Http\Request;
 
 class CandidatedetailController extends Controller
 {
+ 
     public function store(Request $request)
     {
         // Validate the incoming data
         $validatedData = $request->validate([
             'company_id' => 'required|exists:companyusers,id',
-            // 'user_id' => 'required|exists:users,id', // Validate user_id based on your logic
+           
             'job_id' => 'required|exists:jobs,id',
             'name' => 'required|string',
             'email' => 'required|email',
@@ -23,9 +24,15 @@ class CandidatedetailController extends Controller
 
    
         $candidateDetail = new Candidatedetail($validatedData);
+
         $candidateDetail->save();
 
        
-        return response()->json(['message' => 'Application submitted successfully']);
+        return response()->json([
+            'message' => 'Application submitted successfully',
+            'candidate_id' => $candidateDetail->id, 
+            'company_id' => $candidateDetail->company_id, 
+            'job_id' => $candidateDetail->job_id, 
+        ]);
     }
 }

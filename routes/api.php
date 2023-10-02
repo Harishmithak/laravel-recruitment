@@ -7,7 +7,8 @@ use App\Http\Controllers\CompanyuserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\CandidatedetailController;
-
+use App\Http\Controllers\AcademicdetailController;
+use App\Http\Controllers\ExperienceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,9 +48,12 @@ Route::post('/jobs', [JobController::class, 'store']);
 
 
 Route::get('/jobs/{id}', [JobController::class, 'show']);
-
+Route::get('/job/{id}', [JobController::class, 'restore']);
 
 Route::put('/jobs/{id}', [JobController::class, 'update']);
+Route::post('/academicdetail', [AcademicdetailController::class, 'store']);
+Route::post('/experiencedetail', [ExperienceController::class,'store']);
+
 
 
 Route::delete('/jobs/{id}', [JobController::class, 'softDelete']);
@@ -57,3 +61,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// Route::post('/academicdetail', [AcademicdetailController::class, 'store']);
