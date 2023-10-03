@@ -53,6 +53,9 @@ Route::get('/job/{id}', [JobController::class, 'restore']);
 Route::put('/jobs/{id}', [JobController::class, 'update']);
 Route::post('/academicdetail', [AcademicdetailController::class, 'store']);
 Route::post('/experiencedetail', [ExperienceController::class,'store']);
+// Assuming you are using the `api.php` file for API routes
+Route::get('/candidatedetails', [CandidatedetailController::class, 'getAllDetails']);
+
 
 
 

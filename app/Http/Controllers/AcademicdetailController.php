@@ -10,7 +10,7 @@ class AcademicdetailController extends Controller
     {
         try {
             \Log::info('Request data:', $request->all());
-        // Validate the incoming request
+
         $validatedData = $request->validate([
             'candidate_id' => 'required|exists:candidatedetails,id',
             'company_id' => 'required|exists:companyusers,id',
@@ -27,10 +27,9 @@ class AcademicdetailController extends Controller
             'percentage_twelfth' => 'required|numeric',
             'skills' => 'required|string',
             'job_position' => 'required|string',
-            // Add additional validation rules for other fields
+          
         ]);
 
-        // Create a new AcademicDetails instance and save it to the database
         $academicDetails = Academicdetail::create($validatedData);
         return response()->json([
             'message' => 'Application submitted successfully',
@@ -40,13 +39,13 @@ class AcademicdetailController extends Controller
             'job_id' =>  $academicDetails->job_id, 
         ]);
 
-        // return response()->json(['message' => 'Details stored successfully', 'data' => $academicDetails], 201);
+        
     
 } catch (\Exception $e) {
-    // Log the exception
+    
     \Log::error($e);
 
-    // Return a generic error response
+    
     return response()->json(['error' => 'Internal Server Error'], 500);
 }
 }

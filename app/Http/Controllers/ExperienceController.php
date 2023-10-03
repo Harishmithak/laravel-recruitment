@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Models\Experiendetail;
+use App\Mail\ExperienceApplied;
+use App\Models\Candidatedetail; 
+use Illuminate\Support\Facades\Mail;
 
 use Illuminate\Http\Request;
 
@@ -10,7 +13,7 @@ class ExperienceController extends Controller
     public function store(Request $request)
     {
         try {
-            // Validate the incoming data
+          
             $validatedData = $request->validate([
                 'candidate_id' => 'required|exists:candidatedetails,id',
                 'academic_id' => 'required|exists:academicdetails,id',
@@ -22,6 +25,15 @@ class ExperienceController extends Controller
             ]);
 
             $experienceDetail = Experiendetail::create($validatedData);
+
+            $candidate = Candidatedetail::findOrFail($validatedData['candidate_id']);
+            $candidateEmail = $candidate->email;
+            $candidatename=$candidate->name;
+           // $candidate=$candidate->name;
+
+          
+            Mail::to($candidateEmail)->send(new ExperienceApplied($experienceDetail));
+
 
             return response()->json([
                 'message' => 'Experience detail submitted successfully',
