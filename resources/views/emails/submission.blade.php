@@ -48,7 +48,6 @@
         <p>Thank you and  We are looking  forward to the possibility of working with you.</p>
         <div class="footer">
             Best Regards,<br>
-         
         </div>
     </div>
 </body>

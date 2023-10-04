@@ -7,38 +7,10 @@ use Illuminate\Http\Request;
 
 class CandidatedetailController extends Controller
 {
- 
-    // public function store(Request $request)
-    // {
-      
-    //     $validatedData = $request->validate([
-    //         'company_id' => 'required|exists:companyusers,id',
-    //         'job_id' => 'required|exists:jobs,id',
-    //         'name' => 'required|string',
-    //         'email' => 'required|email',
-    //         'dob' => 'required|date',
-    //          'candidate_image' => 'required|image|max:2048', 
-    //         // 'resume' => 'required|file|max:2048', 
-    //     ]);
-
-   
-    //     $candidateDetail = new Candidatedetail($validatedData);
-
-    //     $candidateDetail->save();
-
-       
-    //     return response()->json([
-    //         'message' => 'Application submitted successfully',
-    //         'candidate_id' => $candidateDetail->id, 
-    //         'company_id' => $candidateDetail->company_id, 
-    //         'job_id' => $candidateDetail->job_id, 
-    //     ]);
-    // }
     public function store(Request $request)
     {
         try {
             \Log::info('Received request:', $request->all());
-
             $validatedData = $request->validate([
                 'company_id' => 'required|exists:companyusers,id',
                 'job_id' => 'required|exists:jobs,id',
@@ -49,8 +21,6 @@ class CandidatedetailController extends Controller
                 'signature_image' => 'sometimes|image|max:2048',
                 'resume'=> 'nullable|file|mimes:pdf|max:2048',
             ]);
-
-    
             if ($request->hasFile('candidate_image')) {
                 $imagePath = $request->file('candidate_image')->store('uploads', 'public');
             } else {
@@ -88,8 +58,7 @@ class CandidatedetailController extends Controller
                 'company_id' => $candidateDetail->company_id,
                 'job_id' => $candidateDetail->job_id,
             ]);
-        } catch (\Exception $e) {
-           
+        } catch (Exception $e) {
             \Log::error('Exception occurred: ' . $e->getMessage());
             return response()->json([
                 'message' => 'Error submitting application',
@@ -99,13 +68,14 @@ class CandidatedetailController extends Controller
     public function getAllDetails()
     {
         try {
-            $details = Candidatedetail::all();
+      
+             $details = Candidatedetail::all();
 
             return response()->json([
                 'message' => 'Details fetched successfully',
                 'details' => $details,
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             \Log::error('Exception occurred: ' . $e->getMessage());
             return response()->json([
                 'message' => 'Error fetching details',

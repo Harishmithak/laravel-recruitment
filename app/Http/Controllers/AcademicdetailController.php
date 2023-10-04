@@ -10,8 +10,7 @@ class AcademicdetailController extends Controller
     {
         try {
             \Log::info('Request data:', $request->all());
-
-        $validatedData = $request->validate([
+            $validatedData = $request->validate([
             'candidate_id' => 'required|exists:candidatedetails,id',
             'company_id' => 'required|exists:companyusers,id',
             'job_id' => 'required|exists:jobs,id',
@@ -38,15 +37,9 @@ class AcademicdetailController extends Controller
             'company_id' => $academicDetails->company_id, 
             'job_id' =>  $academicDetails->job_id, 
         ]);
-
-        
-    
-} catch (\Exception $e) {
-    
+} catch (Exception $e) {
     \Log::error($e);
-
-    
-    return response()->json(['error' => 'Internal Server Error'], 500);
+    return response()->json(['error' => 'Error'], 500);
 }
 }
 }
