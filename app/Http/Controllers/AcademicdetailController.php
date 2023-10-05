@@ -42,4 +42,20 @@ class AcademicdetailController extends Controller
     return response()->json(['error' => 'Error'], 500);
 }
 }
+
+public function getByCandidateId($candidateId)
+{
+    try {
+        $academicDetails = Academicdetail::where('candidate_id', $candidateId)->first();
+        return response()->json([
+            'message' => 'Academic details fetched successfully',
+            'academicDetails' => $academicDetails,
+        ]);
+    } catch (Exception $e) {
+        \Log::error('Exception occurred: ' . $e->getMessage());
+        return response()->json([
+            'message' => 'Error fetching academic details',
+        ], 500);
+    }
+}
 }

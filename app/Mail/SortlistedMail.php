@@ -8,34 +8,30 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Experiendetail;
 
-class ExperienceApplied extends Mailable
+class SortlistedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public $experienceDetail;
-
-    public function __construct(Experiendetail $experienceDetail)
+   
+    public function __construct()
     {
-        $this->experienceDetail = $experienceDetail;
+        //
     }
     public function build()
     {
-        return $this->subject('Application Confirmation')
-                    ->view('emails.submission');
+        return $this->view('emails.sortlisted'); 
     }
-
     /**
      * Get the message envelope.
      */
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Application confirmation',
+            subject: 'Sortlisted Mail',
         );
     }
 
@@ -45,7 +41,7 @@ class ExperienceApplied extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.submission',
+            view: 'emails.sortlisted',
         );
     }
 

@@ -41,4 +41,20 @@ class ExperienceController extends Controller implements ShouldQueue
             ], 500);
         }
     }
+    public function getByCandidateId($candidateId)
+{
+    try {
+        $experienceDetails = Experiendetail::where('candidate_id', $candidateId)->first();
+
+        return response()->json([
+            'message' => 'Academic details fetched successfully',
+            'experienceDetails' => $experienceDetails,
+        ]);
+    } catch (Exception $e) {
+        \Log::error('Exception occurred: ' . $e->getMessage());
+        return response()->json([
+            'message' => 'Error fetching academic details',
+        ], 500);
+    }
+}
 }

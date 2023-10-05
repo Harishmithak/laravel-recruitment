@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('logins', function (Blueprint $table) {
             $table->id();
             $table->string('email');
+            $table->index('email');
             // $table->string('usertype');
             $table->timestamp('login_time')->default(now());
             $table->timestamp('logout_time')->default(now());

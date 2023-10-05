@@ -35,7 +35,8 @@ class CompanyuserController extends Controller
             if (!$companyUser) {
                 return response()->json(['message' => 'Company user not found'], 404);
             }
-            return response()->json(['companyUser' => $companyUser], 200);
+            else
+                 return response()->json(['companyUser' => $companyUser], 200);
         } catch (Exception $e) {
             \Log::error('Exception occurred: ' . $e->getMessage());
             return response()->json(['error' => 'An error occurred while processing your request.'], 500);

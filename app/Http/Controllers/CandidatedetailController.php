@@ -1,9 +1,8 @@
 <?php
-
 namespace App\Http\Controllers;
 use App\Models\Candidatedetail;
-
 use Illuminate\Http\Request;
+use App\Models\Companyuser;
 
 class CandidatedetailController extends Controller
 {
@@ -32,13 +31,11 @@ class CandidatedetailController extends Controller
             } else {
                 $imagePathSign = null;
             }
-
             if ($request->hasFile('resume')) {
                 $imagePathResume = $request->file('resume')->store('resumes', 'public');
             } else {
                 $imagePathResume = null;
             }
-
             $candidateDetail = new Candidatedetail([
                 'company_id' => $validatedData['company_id'],
                 'job_id' => $validatedData['job_id'],
@@ -49,9 +46,7 @@ class CandidatedetailController extends Controller
                 'signature_image' => $imagePathSign, 
                 'resume' => $imagePathResume, 
             ]);
-
             $candidateDetail->save();
-
             return response()->json([
                 'message' => 'Application submitted successfully',
                 'candidate_id' => $candidateDetail->id,
@@ -65,17 +60,39 @@ class CandidatedetailController extends Controller
             ], 500);
         }
     }
-    public function getAllDetails()
+
+    // public function getAllDetails()
+    // {
+    //     try {
+      
+    //          $details = Candidatedetail::all();
+
+    //         return response()->json([
+    //             'message' => 'Details fetched successfully',
+    //             'details' => $details,
+    //         ]);
+    //     } catch (Exception $e) {
+    //         \Log::error('Exception occurred: ' . $e->getMessage());
+    //         return response()->json([
+    //             'message' => 'Error fetching details',
+    //         ], 500);
+    //     }
+    // }
+    public function getAllDetails($userEmail)
     {
         try {
-      
-             $details = Candidatedetail::all();
+            // Retrieve the corresponding company_id from the companyusers table
+            $company = Companyuser::where('company_email', $userEmail)->first();
+            $companyId = $company->id;
+
+            // Retrieve candidate details based on the company_id
+            $details = Candidatedetail::where('company_id', $companyId)->get();
 
             return response()->json([
                 'message' => 'Details fetched successfully',
                 'details' => $details,
             ]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             \Log::error('Exception occurred: ' . $e->getMessage());
             return response()->json([
                 'message' => 'Error fetching details',

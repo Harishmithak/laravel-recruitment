@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\job;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class JobController extends Controller
 {
@@ -21,7 +22,8 @@ class JobController extends Controller
     public function index1()
     {
         try {
-            $jobs = job::all();
+            //$jobs = job::all();
+             $jobs = DB::select('CALL GetAllJobs()');
             return response()->json(['jobs' => $jobs], 200);
         } catch (\Exception $e) {
             \Log::error('Error fetching all jobs: ' . $e->getMessage());
@@ -97,10 +99,10 @@ class JobController extends Controller
             if (!$job) {
                 return response()->json(['message' => 'Job not found'], 404);
             }
-
+        else{
             $job->update($validatedData);
-
             return response()->json(['message' => 'Job updated successfully', 'job' => $job], 200);
+        }
         } catch (Exception $e) {
             \Log::error('Error updating job: ' . $e->getMessage());
             return response()->json(['error' => 'Internal Server Error'], 500);
@@ -115,10 +117,10 @@ class JobController extends Controller
             if (!$job) {
                 return response()->json(['message' => 'Job not found'], 404);
             }
-
+            else{
             $job->delete();
-
             return response()->json(['message' => 'Job deleted successfully'], 204);
+             }
         } catch (Exception $e) {
             \Log::error('Error soft deleting job: ' . $e->getMessage());
             return response()->json(['error' => 'Internal Server Error'], 500);
@@ -148,6 +150,8 @@ class JobController extends Controller
         if ($jobs->isEmpty()) {
             return response()->json(['message' => 'No jobs found for the logged-in user'], 404);
         }
+        else{
         return response()->json(['jobs' => $jobs], 200);
+        }
     }
 }
