@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('candidate_image')->nullable();
             $table->string('signature_image')->nullable();
             $table->string('resume')->nullable();
+            $table->string('status')->default('Applied');
+            $table->string('remarks')->nullable(); 
             $table->timestamps();
             $table->foreign('company_id')->references('id')->on('companyusers')->onDelete('cascade');
             $table->foreign('job_id')->references('id')->on('jobs')->onDelete('cascade');

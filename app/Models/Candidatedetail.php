@@ -18,4 +18,5 @@ class Candidatedetail extends Model
     {
         return $this->hasMany(Experiendetail::class);
     }
+
 }

@@ -1,8 +1,9 @@
 <?php
 namespace App\Http\Controllers;
 use App\Models\Candidatedetail;
-use Illuminate\Http\Request;
 use App\Models\Companyuser;
+
+use Illuminate\Http\Request;
 
 class CandidatedetailController extends Controller
 {
@@ -55,39 +56,24 @@ class CandidatedetailController extends Controller
             ]);
         } catch (Exception $e) {
             \Log::error('Exception occurred: ' . $e->getMessage());
+            dd($e->getMessage());
             return response()->json([
                 'message' => 'Error submitting application',
             ], 500);
         }
     }
-
-    // public function getAllDetails()
-    // {
-    //     try {
-      
-    //          $details = Candidatedetail::all();
-
-    //         return response()->json([
-    //             'message' => 'Details fetched successfully',
-    //             'details' => $details,
-    //         ]);
-    //     } catch (Exception $e) {
-    //         \Log::error('Exception occurred: ' . $e->getMessage());
-    //         return response()->json([
-    //             'message' => 'Error fetching details',
-    //         ], 500);
-    //     }
-    // }
-    public function getAllDetails($userEmail)
+ 
+    public function getAllDetailsByEmail($userEmail)
     {
         try {
-            // Retrieve the corresponding company_id from the companyusers table
             $company = Companyuser::where('company_email', $userEmail)->first();
+            if (!$company) {
+                return response()->json([
+                    'message' => 'Error fetching id',
+                ], 500);
+}
             $companyId = $company->id;
-
-            // Retrieve candidate details based on the company_id
             $details = Candidatedetail::where('company_id', $companyId)->get();
-
             return response()->json([
                 'message' => 'Details fetched successfully',
                 'details' => $details,
