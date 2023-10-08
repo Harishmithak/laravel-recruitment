@@ -5,6 +5,7 @@ use App\Models\User;
 use App\Models\Companyuser;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+//use Barryvdh\Debugbar\Facades\Debugbar;
 
 class LoginController extends Controller
 {
@@ -15,14 +16,11 @@ class LoginController extends Controller
                 'email' => 'required|email',
                 'password' => 'required',
             ]);
-
             $credentials = $request->only('email', 'password');
             $user = User::where('email', $credentials['email'])->first();
-
             if (!$user) {
                 $user = Companyuser::where('company_email', $credentials['email'])->first();
             }
-
             if ($user) {
                 $passwordField = ($user instanceof Companyuser) ? 'company_password' : 'password';
 
@@ -31,9 +29,7 @@ class LoginController extends Controller
                         'email' => $credentials['email'],
                         'login_time' => now(),
                     ]);
-
                     $userType = ($user instanceof Companyuser) ? 'company' : 'user';
-
                     return response()->json([
                         'success' => true,
                         'message' => 'Login successful',
@@ -41,15 +37,14 @@ class LoginController extends Controller
                     ]);
                 }
             }
-
-            \Log::error('Login failed for email: ' . $credentials['email']);
+            Log::error('Login failed for email: ' . $credentials['email']);
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid email or password',
             ], 401);
-
         } catch (Exception $e) {
-            \Log::error('Login error: ' . $e->getMessage());
+           // Debugbar::error('Error Found!!!'); 
+            Log::error('Login error: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'An error occurred during login',

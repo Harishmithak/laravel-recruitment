@@ -26,7 +26,7 @@ class JobController extends Controller
              $jobs = DB::select('CALL GetAllJobs()');
             return response()->json(['jobs' => $jobs], 200);
         } catch (\Exception $e) {
-            \Log::error('Error fetching all jobs: ' . $e->getMessage());
+            Log::error('Error fetching all jobs: ' . $e->getMessage());
             return response()->json(['error' => 'Internal Server Error'], 500);
         }
     }

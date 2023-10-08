@@ -10,11 +10,14 @@ use App\Http\Controllers\AcademicdetailController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\EmailController;
 
+
 Route::get('/register', function () {
     return view('layouts.app');
 });
 
 Route::controller(LoginController::class)->group(function () {
+    
+    Debugbar::info('Working!!!');
     Route::post('/login', 'login');
 });
 
